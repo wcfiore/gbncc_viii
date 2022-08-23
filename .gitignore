@@ -1,0 +1,6 @@
+# data files (pre-publication)
+data/
+
+# actual pdf/png plots 
+/*.pdf
+/*.png
