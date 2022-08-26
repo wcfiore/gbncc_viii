@@ -96,7 +96,7 @@ for nn,pp,dd,s350,s820 in zip(names,per_u,dm_u,flux350,flux820):
     plt.ylim([-0.1,1.25])
     count += 1
 
-    plt.text(0.05,1.1,f"PSR {nn}",horizontalalignment='left',verticalalignment='bottom',fontsize=9)
+    plt.text(0.05,1.1,f"PSR {nn.replace('-','$-$')}",horizontalalignment='left',verticalalignment='bottom',fontsize=9)
     plt.text(0.97,0.9,dd,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
     plt.text(0.92,0.75,pp,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
     plt.text(0.0,0.3,s350,horizontalalignment='left',verticalalignment='bottom',fontsize=7,color='r')
