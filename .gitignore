@@ -4,3 +4,7 @@ data/
 # actual pdf/png plots 
 /*.pdf
 /*.png
+
+# notebooks and corresponding files (for now)
+.ipynb_checkpoints/
+*.ipynb
