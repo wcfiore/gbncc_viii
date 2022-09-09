@@ -5,6 +5,5 @@ data/
 /*.pdf
 /*.png
 
-# notebooks and corresponding files (for now)
+# notebook companion files
 .ipynb_checkpoints/
-*.ipynb
