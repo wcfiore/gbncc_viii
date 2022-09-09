@@ -5,5 +5,6 @@ data/
 /*.pdf
 /*.png
 
-# notebook companion files
+# notebook/module companion files
 .ipynb_checkpoints/
+__pycache__/
