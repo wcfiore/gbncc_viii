@@ -8,6 +8,21 @@ import astropy.units as u
 import numpy as np
 
 
+def digits_for_unc(error):
+    """Determine N digits of uncertainty
+
+    Input: parameter uncertainty value
+    Output: number of digits to use in uf/ufve
+    """
+    error = str(error)
+    while error.startswith('0') or error.startswith('.'):
+        error = error[1:]
+    
+    if error.startswith('1'):
+        return 2
+    else:
+        return 1
+    
 def uf(param,digits=1):
     """Simple uncertainty formatting
     
