@@ -40,7 +40,7 @@ params = {"backend": "pdf",
 mpl.rcParams.update(params)
 
 # Get info from data files
-DATA_PATH = "data/"
+DATA_PATH = "data/clutter/old_profiles/" # using (nearly identical) old profiles since new ones are not aligned
 all_files = glob.glob(f"{DATA_PATH}*.profile")
 flux_info = np.loadtxt(f"{DATA_PATH}flux.info",dtype="str")
 flux350 = [ss[1] for ss in flux_info]
