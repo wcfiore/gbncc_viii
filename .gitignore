@@ -1,5 +1,5 @@
-# data files (pre-publication)
-data/
+# clutter 
+data/clutter/
 
 # actual pdf/png plots 
 /*.pdf
