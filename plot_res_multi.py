@@ -1,4 +1,6 @@
 import numpy as np
+import pint.models as model
+import pint.derived_quantities as dq
 import matplotlib.pyplot as plt
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -78,14 +80,28 @@ for jj in range(2):
         if max(yr_T)>max_yr:
             max_yr = max(yr_T)
 
+        # Get phase info
+        psr = pretty_psr_name.replace('$','').split()[1]
+        par_fname = f"data/{psr}_swiggum+22.par"
+        mo = model.get_model(par_fname)
+        f0,f0err,f1,f1err = (mo['F0'].quantity,mo['F0'].uncertainty,mo['F1'].quantity,mo['F1'].uncertainty)
+        p0,p0err,p1,p1err = dq.pferrs(f0,f0err,f1,f1err)
+
+        ax_R = ax.twinx()
         for o in obs:
             inds = o.in_bw_inds(frq)
             ax.errorbar(yr_T[inds],res[inds],yerr=err[inds],fmt='o',mfc=o.color,mec=o.color,ecolor=o.color,label=o.label,ms=4,capsize=3)
+            # ax_R.errorbar(day,res/p0.value/1.0e6,yerr=err,fmt='o',alpha=0.0) # res in microseconds
             check_tot += np.sum(inds)
 
         rms = np.sqrt(np.mean(res**2))
         ax.set_ylim([-5*rms,5*rms])
+        ax_R.set_ylim([-5*rms/p0.value/1.0e6,5*rms/p0.value/1.0e6])
         ax.minorticks_on()
+        ax_R.minorticks_on()
+
+        # 3 labeled ticks: https://jakevdp.github.io/PythonDataScienceHandbook/04.10-customizing-ticks.html
+        ax_R.yaxis.set_major_locator(plt.MaxNLocator(3))
 
         ax.text(0.93,0.9,pretty_psr_name,color='black',rotation=0,size=10,va='center',ha='right',transform=ax.transAxes)
         print(str(check_tot)+'/'+str(len(res))+' residuals plotted.')
@@ -120,8 +136,9 @@ for jj in range(2):
     ax2.set_xlim(minmax_mjd_T)
     ax2.minorticks_on()
 
-    # Add common ylabel
+    # Add common ylabels
     fig.text(0.0, 0.5,r'Residual ($\mu$s)', ha='center', va='center', rotation='vertical')
+    fig.text(1.0, 0.5,r'Phase', ha='center', va='center', rotation='vertical')
 
     # Adjust layout and save figure
     fig.subplots_adjust(hspace=0)
