@@ -1,0 +1,29 @@
+PSRJ           J1530-2114
+RAJ             15:30:42.9958211         1  0.03549744821737005321   
+DECJ           -21:14:20.74197           1  2.04783010068499964681   
+F0             1.9788701052134944113     1  0.00000000001761945704   
+F1             -1.8169646123592119238e-15 1  1.2183863068396039113e-18
+PEPOCH         57000                       
+POSEPOCH       57000                       
+DMEPOCH        57000                       
+DM             37.949114431379576608     1  0.01412143130333499627   
+START          56588.857740101660202       
+FINISH         57399.541756635161899       
+TZRMJD         57071.36340823697503        
+TZRFRQ         864.92499999999995453    
+TZRSITE        1   
+TRES           443.143      
+EPHVER         5                           
+NE_SW          4                           
+CLK            TT(BIPM2021)
+MODE 1
+UNITS          TCB
+TIMEEPH        IF99
+DILATEFREQ     Y
+PLANET_SHAPIRO Y
+T2CMETHOD      IAU2000B
+CORRECT_TROPOSPHERE  Y
+EPHEM          DE440
+NITS           1
+NTOA           62
+CHI2R          1.0907 56
