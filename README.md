@@ -1,2 +1,2 @@
-# gbncc_vii
-Code used to generate figures/tables for Swiggum et al. GBNCC paper.
+# gbncc_viii
+Code used to generate figures/tables for Fiore et al. GBNCC paper.
