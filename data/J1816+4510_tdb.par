@@ -22,15 +22,18 @@ TZRMJD         57079.51324512570892
 TZRFRQ         769.21501192683084802    
 TZRSITE        1   
 TRES           -nan         
+EPHVER         5                           
 NE_SW          4                           
 CLK            TT(BIPM2021)
 MODE 1
 UNITS          TDB
-TIMEEPH        FB90
-DILATEFREQ     N
-PLANET_SHAPIRO N
+TIMEEPH        IF99
+DILATEFREQ     Y
+PLANET_SHAPIRO Y
 T2CMETHOD      IAU2000B
-CORRECT_TROPOSPHERE  N
+CORRECT_TROPOSPHERE  Y
 EPHEM          DE440
 NITS           1
 NTOA           0
+CHI2R          -nan 0
+JUMP NAME NOT 0.0010678587768585 1
