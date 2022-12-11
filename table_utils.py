@@ -45,27 +45,27 @@ def ufve(val,err,digits=1):
 def get_dmdists(gal_coord,dm):
     """ Get YMW17/NE2001 DM distances (kpc)
     
-    Input: astropy galactic coord object; dm quantity
+    Input: astropy galactic coord object; dm value
     Output: DM distance list NE/YWM (kpc)
     """
-    dmdist_ne, tau_sc = pygedm.dm_to_dist(gal_coord.l,gal_coord.b,dm.value,method='ne2001')
-    dmdist_ymw, tau_sc = pygedm.dm_to_dist(gal_coord.l,gal_coord.b,dm.value,method='ymw16')
+    dmdist_ne, tau_sc = pygedm.dm_to_dist(gal_coord.l,gal_coord.b,dm,method='ne2001')
+    dmdist_ymw, tau_sc = pygedm.dm_to_dist(gal_coord.l,gal_coord.b,dm,method='ymw16')
     return dmdist_ne.to(u.kpc).value, dmdist_ymw.to(u.kpc).value
 
-def format_ra(eqcoord_obj):
+def format_ra(eqcoord_obj,ra_err):
     """ LaTex-format RA
     E.g.: $20^{\rm h}\, 22^{\rm m}\, 33\, \fs256$
     Input: astropy equatorial coord object
     """
     hms = eqcoord_obj.ra.hms
-    s = f"{hms.s:.2f}"
+    s = ufve(hms.s,ra_err)
     # Really janky, but deals with s1 0 padding
     s1 = s.split('.')[0]
     s2 = s.split('.')[1]
     hms_form = f"${int(hms.h):02}^{{\\rm h}}\\, {int(hms.m):02}^{{\\rm m}}\\, {int(s1):02}\\, \\fs{s2}$"
     return(hms_form)
 
-def format_dec(eqcoord_obj):
+def format_dec(eqcoord_obj,dec_err):
     """ LaTex-format Dec
     E.g.: $+25\arcdeg\, 34\arcmin\, 42\, \farcs5$
     Input: astropy equatorial coord object
@@ -73,22 +73,24 @@ def format_dec(eqcoord_obj):
     dms = eqcoord_obj.dec.dms
     # {:+} adds a sign regardless of -/+
     # abs() to remove '-' from Dec m, s
-    s = f"{abs(dms.s):.1f}"
+    s = ufve(np.abs(dms.s),dec_err)
     # Really janky, but deals with s1 0 padding
-    s1 = s.split('.')[0]
-    s2 = s.split('.')[1]
-    dms_form = f"${int(dms.d):+03}\\arcdeg\\, {int(abs(dms.m)):02}\\arcmin\\, {int(s1):02}\\, \\farcs{s2}$"
+    if "." in str(s):
+        s1 = s.split('.')[0]
+        s2 = s.split('.')[1]
+        dms_form = f"${int(dms.d):+03}\\arcdeg\\, {int(abs(dms.m)):02}\\arcmin\\, {int(s1):02}\\, \\farcs{s2}$"
+    else:
+        dms_form = f"${int(dms.d):+03}\\arcdeg\\, {int(abs(dms.m)):02}\\arcmin\\, {s}\\farcs$"
     return(dms_form)
 
-def PMtot_err(PMx,PMy):
+def PMtot_err(PMx,PMx_err,PMy,PMy_err):
     """Calculate total proper motion and uncertainty
     
-    Input: PMx, PMy (PINT model quantities)
+    Input: PMx, PMx error, PMy, PMy error (with units)
     """
-    PMx_err, PMy_err = (PMx.uncertainty_value,PMy.uncertainty_value)
-    pmtot = np.sqrt(PMx.value**2+PMy.value**2)
-    pmtot_err = np.sqrt(PMx.value**2*PMx_err**2+PMy.value**2*PMy_err**2)/pmtot
-    return (pmtot, pmtot_err) * (u.mas / u.yr)
+    pmtot = np.sqrt(PMx**2+PMy**2)
+    pmtot_err = np.sqrt(PMx**2*PMx_err**2+PMy**2*PMy_err**2)/pmtot
+    return (pmtot, pmtot_err)
 
 def Vtrans_err(PMtot,PMtot_err,D,D_err):
     """Calculate transverse velocity and uncertainty

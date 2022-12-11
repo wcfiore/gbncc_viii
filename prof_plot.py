@@ -14,9 +14,12 @@ def prof_function(file):
     off_bins = np.where(profile < init_median)
     off_mean = np.mean(profile[off_bins])
 
-    # Scale profile so max = 0.5 and off-pulse noise is centered on 0.
+    # Scale profile so max = 0.5 (0.2 for J1327) and off-pulse noise is centered on 0.
     profile -= off_mean
-    profile /= 2 * np.max(profile) 
+    if "1327" in file:
+        profile /= 5 * np.max(profile)
+    else:
+        profile /= 2 * np.max(profile) 
 
     return profile
 
@@ -74,7 +77,7 @@ for i in range(3):
         flux820  = [[ss[5] for ss in flux_info][7]]
         flux1380 = [[ss[6] for ss in flux_info][7]]
         names = [[ss[0] for ss in flux_info][7]]
-        fig3 = plt.figure()
+        fig3 = plt.figure(figsize=(2,6))
         
     periods = []
     dms = []
@@ -139,72 +142,153 @@ for i in range(3):
             ax3 = plt.subplot()
 
         shift  = 0.0
+        dshift = 0.5
         offset = 0.0
         rotate = 0
-        if nn=="J0636+5128":
-            dshift = 0.2
-        elif nn=="J1327+3423":
-            shift = 0.0
-            dshift = 0.15
-            offset = -0.05
-        elif nn=="J1434+7257":
-            dshift = 0.25
-        elif nn=="J1816+4510":
-            dshift = 0.25
-            rotate = 30-64
-        elif nn=="J2210+5712":
-            offset = 0.3
-        else:
+        showfreq = 0
+        freqxshift = -0.05
+        freqyshift = 0.175
+        if nn=="J0141+6303":
+            rotate = -7
+        elif nn=="J0214+5222":
+            rotate = -30
             dshift = 0.4
+            freqyshift += 0.05
+        elif nn=="J0415+6111":
+            freqyshift += 0.11
+        elif nn=="J0636+5128":
+            dshift = 0.22
+            offset = -0.07
+            freqyshift += -0.13
+        elif nn=="J0957-0619":
+            offset = 0.4
+            freqyshift += 0.4
+        elif nn=="J1239+3239":
+            dshift = 0.4
+            freqxshift += -0.02
+            freqyshift += 0.05
+        elif nn=="J1327+3423":
+            showfreq = 1
+            shift = 0.0
+            dshift = 0.2
+            offset = -0.07
+            freqyshift = 0.0
+        elif nn=="J1434+7257":
+            dshift = 0.3
+            offset = -0.08
+            freqxshift += 0.32
+            freqyshift += -0.1
+        elif nn=="J1816+4510":
+            dshift = 0.27
+            rotate = 30-64
+            freqxshift += 0.35
+            freqyshift += -0.07
+        elif nn=="J1913+3732":
+            
+            freqxshift += -0.02
+        elif nn=="J2115+6702":
+            freqyshift += 0.2
+        elif nn=="J2145+2158":
+            freqyshift += 0.1
+        elif nn=="J2210+5712":
+            offset = 0.4
+            freqyshift += 0.4
+        elif nn=="J2326+6243":
+            rotate = -10
+            freqxshift += 0.55
+            freqyshift += 0.1
+        elif nn=="J2354-2250":
+            rotate = -20
+            freqxshift += 0.5
+        else:
+            dshift = 0.5
 
         if profile_fname_57 in all_files:
             y = prof_function(profile_fname_57)
             plt.plot(phase,np.roll(y,rotate)+offset,c='black',label="57 MHz" if count == 0 else "")
+            plt.text(0.05,0.0,"57 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7,color='black')
+            plt.text(0.05,-0.05,f"{s57} mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='black')
             shift += dshift
         if profile_fname_327 in all_files:
             y = prof_function(profile_fname_327)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='purple',label="327 MHz" if count == 0 else "")
+            plt.text(0.05,shift+0.0,"327 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='purple')
+            plt.text(0.05,shift-0.05,f"{s327} mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='purple')
             shift += dshift
         if profile_fname_350 in all_files:
             y = prof_function(profile_fname_350)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='r',label="350 MHz" if count == 0 else "")
+            if nn=="J1327+3423":
+                df = 0.0
+                freqxshift += 0.05
+            else:
+                df = -1
+            plt.text(freqxshift+0.05,shift+0.0,"350 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='r',alpha=showfreq)
+            plt.text(freqxshift+0.05,shift-0.05+freqyshift,f"{s350} mJy",horizontalalignment='left', \
+                     verticalalignment='bottom',fontsize=7+df,color='r')
             shift += dshift
+            if nn=="J1327+3423":
+                freqxshift -= 0.05
         if profile_fname_430 in all_files:
             y = prof_function(profile_fname_430)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='pink',label="430 MHz" if count == 0 else "")
+            plt.text(0.05,shift+0.0,"430 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='pink')
+            plt.text(0.05,shift-0.05,f"{s430} mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='pink')
             shift += dshift
         if profile_fname_820 in all_files:
             y = prof_function(profile_fname_820)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='b',label="820 MHz" if count == 0 else "")
+            if nn=="J2326+6243":
+                dy = -0.1
+            else:
+                dy = 0.0
+            if nn=="J1327+3423":
+                df = 0.0
+                freqxshift += 0.05
+            else:
+                df = -1
+            plt.text(freqxshift+0.05,shift+0.0,"820 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='b',alpha=showfreq)
+            plt.text(freqxshift+0.05,shift-0.05+freqyshift+dy,f"{s820} mJy",horizontalalignment='left', \
+                     verticalalignment='bottom',fontsize=7+df,color='b')
             shift += dshift
+            if nn=="J1327+3423":
+                freqxshift -= 0.05
         if profile_fname_1380 in all_files:
             y = prof_function(profile_fname_1380)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='g',label="1380 MHz" if count == 0 else "")
+            plt.text(0.05,shift+0.0,"1380 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='g')
+            plt.text(0.05,shift-0.05,f"{s1380} mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
+                     color='g')
             shift += dshift
         if profile_fname_1500 in all_files:
             y = prof_function(profile_fname_1500)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='g',label="1500 MHz" if count == 0 else "")
+            if nn=="J1816+4510":
+                dy = 0.1
+            elif nn=="J1434+7257":
+                dy = 0.05
+            else:
+                dy = 0.0
+            plt.text(freqxshift+0.05,shift-0.05+freqyshift+dy,f"{s1500} mJy",horizontalalignment='left', \
+                     verticalalignment='bottom',fontsize=6,color='g')
             shift += dshift
         if profile_fname_2000 in all_files:
             y = prof_function(profile_fname_2000)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='cyan',label="2000 MHz" if count == 0 else "")
+            plt.text(freqxshift+0.05,shift-0.05+freqyshift,f"{s2000} mJy",horizontalalignment='left', \
+                     verticalalignment='bottom',fontsize=6,color='cyan')
             shift += dshift
 
-    #     # Center max profile value
-    #     max_bin = np.argmax(x)+15
-    #     int_shift_by = int(midbin-max_bin)
-    #     x_r = np.roll(x,int_shift_by)
-    #     if both: y_r = np.roll(y,int_shift_by)
-
-    #     if nn == "J2022+2534":
-    #         x_r = np.roll(x,int_shift_by-10)
-    #         y_r = np.roll(y,int_shift_by+17)
-
-    #     plt.plot(phase,x_r,c='r',label="350 MHz" if count == 0 else "")
-    #     if both: plt.plot(phase,y_r+0.5,c='b',label="820 MHz" if count == 0 else "")
         plt.ylim([-0.1,1.25])
         count += 1
-
         
     #     plt.text(0.0,0.3,s350,horizontalalignment='left',verticalalignment='bottom',fontsize=7,color='r')
     #     plt.text(0.0,0.15,"mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7,color='r')
@@ -224,9 +308,9 @@ for i in range(3):
             ax2.set_xticks([])
             ax2.set_yticks([])
         else:
-            plt.text(0.05,1.1,f"PSR {nn.replace('-','$-$')}",horizontalalignment='left',verticalalignment='bottom',fontsize=9)
-            plt.text(1.,0.95,dd,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
-            plt.text(0.95,0.8,pp,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
+            plt.text(0.15,1.2,f"PSR {nn.replace('-','$-$')}",horizontalalignment='left',verticalalignment='bottom',fontsize=9)
+            plt.text(1.,1.15,dd,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
+            plt.text(0.95,1.1,pp,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
             ax3.set_xticks([])
             ax3.set_yticks([])
         
