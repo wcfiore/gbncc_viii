@@ -14,10 +14,10 @@ def prof_function(file):
     off_bins = np.where(profile < init_median)
     off_mean = np.mean(profile[off_bins])
 
-    # Scale profile so max = 0.5 (0.2 for J1327) and off-pulse noise is centered on 0.
+    # Scale profile so max = 0.5 (0.25 for J1327) and off-pulse noise is centered on 0.
     profile -= off_mean
     if "1327" in file:
-        profile /= 5 * np.max(profile)
+        profile /= 4 * np.max(profile)
     else:
         profile /= 2 * np.max(profile) 
 
@@ -151,7 +151,7 @@ for i in range(3):
         if nn=="J0141+6303":
             rotate = -7
         elif nn=="J0214+5222":
-            rotate = -30
+            rotate = -20
             dshift = 0.4
             freqyshift += 0.05
         elif nn=="J0415+6111":
@@ -175,7 +175,7 @@ for i in range(3):
             freqyshift = 0.0
         elif nn=="J1434+7257":
             dshift = 0.3
-            offset = -0.08
+            offset = -0.03
             freqxshift += 0.32
             freqyshift += -0.1
         elif nn=="J1816+4510":
@@ -262,15 +262,15 @@ for i in range(3):
                 freqxshift -= 0.05
         if profile_fname_1380 in all_files:
             y = prof_function(profile_fname_1380)
-            plt.plot(phase,np.roll(y,rotate)+shift+offset,c='g',label="1380 MHz" if count == 0 else "")
+            plt.plot(phase,np.roll(y,rotate)+shift+offset,c='cyan',label="1380 MHz" if count == 0 else "")
             plt.text(0.05,shift+0.0,"1380 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
-                     color='g')
+                     color='cyan')
             plt.text(0.05,shift-0.05,f"{s1380} mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
-                     color='g')
+                     color='cyan')
             shift += dshift
         if profile_fname_1500 in all_files:
             y = prof_function(profile_fname_1500)
-            plt.plot(phase,np.roll(y,rotate)+shift+offset,c='g',label="1500 MHz" if count == 0 else "")
+            plt.plot(phase,np.roll(y,rotate)+shift+offset,c='cyan',label="1500 MHz" if count == 0 else "")
             if nn=="J1816+4510":
                 dy = 0.1
             elif nn=="J1434+7257":
@@ -278,13 +278,13 @@ for i in range(3):
             else:
                 dy = 0.0
             plt.text(freqxshift+0.05,shift-0.05+freqyshift+dy,f"{s1500} mJy",horizontalalignment='left', \
-                     verticalalignment='bottom',fontsize=6,color='g')
+                     verticalalignment='bottom',fontsize=6,color='cyan')
             shift += dshift
         if profile_fname_2000 in all_files:
             y = prof_function(profile_fname_2000)
-            plt.plot(phase,np.roll(y,rotate)+shift+offset,c='cyan',label="2000 MHz" if count == 0 else "")
+            plt.plot(phase,np.roll(y,rotate)+shift+offset,c='g',label="2000 MHz" if count == 0 else "")
             plt.text(freqxshift+0.05,shift-0.05+freqyshift,f"{s2000} mJy",horizontalalignment='left', \
-                     verticalalignment='bottom',fontsize=6,color='cyan')
+                     verticalalignment='bottom',fontsize=6,color='g')
             shift += dshift
 
         plt.ylim([-0.1,1.25])
@@ -296,9 +296,9 @@ for i in range(3):
     #     if both: plt.text(0.0,0.73,"mJy",horizontalalignment='left',verticalalignment='bottom',fontsize=7,color='b')
 
         if i==0:
-            plt.text(0.08,1.08,f"PSR {nn.replace('-','$-$')}",horizontalalignment='left',verticalalignment='bottom',fontsize=8)
-            plt.text(1.,0.95,dd,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
-            plt.text(0.95,0.8,pp,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
+            plt.text(0.08,1.06,f"PSR {nn.replace('-','$-$')}",horizontalalignment='left',verticalalignment='bottom',fontsize=8)
+            plt.text(1.,0.93,dd,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
+            plt.text(0.95,0.78,pp,horizontalalignment='right',verticalalignment='bottom',fontsize=6)
             ax1.set_xticks([])
             ax1.set_yticks([])
         elif i==1:
