@@ -81,7 +81,7 @@ names2 = ['PSR J0032+6946','PSR J0214+5222','PSR J0636+5128','PSR J1239+3239','P
 res_files3 = ['J0141+6303_residuals.dat','J0415+6111_residuals.dat','J0957-0619_residuals.dat','J1505-2524_residuals.dat','J1530-2114_residuals.dat','J1913+3732_residuals.dat']
 names3 = ['PSR J0141+6303','PSR J0415+6111','PSR J0957$-$0619','PSR J1505$-$2524','PSR J1530$-$2114','PSR J1913+3732']
 res_files4 = ['J1929+6630_residuals.dat','J1930+6205_residuals.dat','J2104+2830_residuals.dat','J2115+6702_residuals.dat','J2145+2158_residuals.dat','J2210+5712_residuals.dat']
-names4 = ['PSR J2145+2158','PSR J2210+5712','PSR J1929+6630','PSR J1930+6205','PSR J2104+2830','PSR J2115+6702']
+names4 = ['PSR J1929+6630','PSR J1930+6205','PSR J2104+2830','PSR J2115+6702','PSR J2145+2158','PSR J2210+5712']
 res_files5 = ['J2326+6243_residuals.dat','J2354-2250_residuals.dat']
 names5 = ['PSR J2326+6243','PSR J2354$-$2250']
 
