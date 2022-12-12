@@ -78,12 +78,12 @@ res_files1 = ['J1327+3423_residuals.dat']
 names1 = ['PSR J1327+3423']
 res_files2 = ['J0032+6946_residuals.dat','J0214+5222_residuals.dat','J0636+5128_residuals.dat', 'J1239+3239_residuals.dat','J1434+7257_residuals.dat','J1816+4510_residuals.dat']
 names2 = ['PSR J0032+6946','PSR J0214+5222','PSR J0636+5128','PSR J1239+3239','PSR J1434+7257','PSR J1816+4510']
-res_files3 = ['J0141+6303_residuals.dat','J0415+6111_residuals.dat','J0957-0619_residuals.dat','J1505-2524_residuals.dat','J1530-2114_residuals.dat']
-names3 = ['PSR J0141+6303','PSR J0415+6111','PSR J0957$-$0619','PSR J1505$-$2524','PSR J1530$-$2114']
-res_files4 = ['J1913+3732_residuals.dat', 'J1929+6630_residuals.dat', 'J1930+6205_residuals.dat', 'J2104+2830_residuals.dat', 'J2115+6702_residuals.dat']
-names4 = ['PSR J1913+3732', 'PSR J1929+6630', 'PSR J1930+6205', 'PSR J2104+2830', 'PSR J2115+6702']
-res_files5 = ['J2145+2158_residuals.dat', 'J2210+5712_residuals.dat', 'J2326+6243_residuals.dat', 'J2354-2250_residuals.dat']
-names5 = ['PSR J2145+2158', 'PSR J2210+5712', 'PSR J2326+6243', 'PSR J2354$-$2250']
+res_files3 = ['J0141+6303_residuals.dat','J0415+6111_residuals.dat','J0957-0619_residuals.dat','J1505-2524_residuals.dat','J1530-2114_residuals.dat','J1913+3732_residuals.dat']
+names3 = ['PSR J0141+6303','PSR J0415+6111','PSR J0957$-$0619','PSR J1505$-$2524','PSR J1530$-$2114','PSR J1913+3732']
+res_files4 = ['J1929+6630_residuals.dat','J1930+6205_residuals.dat','J2104+2830_residuals.dat','J2115+6702_residuals.dat','J2145+2158_residuals.dat','J2210+5712_residuals.dat']
+names4 = ['PSR J2145+2158','PSR J2210+5712','PSR J1929+6630','PSR J1930+6205','PSR J2104+2830','PSR J2115+6702']
+res_files5 = ['J2326+6243_residuals.dat','J2354-2250_residuals.dat']
+names5 = ['PSR J2326+6243','PSR J2354$-$2250']
 
 for jj in range(5):
 
@@ -347,11 +347,16 @@ for jj in range(5):
         ax2.set_xlim(minmax_mjd_T)
         ax2.minorticks_on()
 
-        # Add common ylabels
-        fig.text(0.0, 0.5,r'Residual ($\mu$s)', ha='center', va='center', rotation='vertical')
-        fig.text(1.0, 0.5,r'Phase', ha='center', va='center', rotation='vertical')
-
-        # Adjust layout and save figure
-        fig.subplots_adjust(hspace=0)
-        fig.tight_layout(pad=0.0, w_pad=0.5, h_pad=0.25)
+        # Add common ylabels, adjust layout and save figure
+        if jj==4:
+            bot = 0.54
+            labels=0.72
+            fig.text(0.01, labels,r'Residual ($\mu$s)', ha='center', va='center', rotation='vertical')
+            fig.text(1.01, labels,r'Phase', ha='center', va='center', rotation='vertical')
+            fig.subplots_adjust(bottom=bot)
+        else:
+            fig.text(-0.007, 0.5,r'Residual ($\mu$s)', ha='center', va='center', rotation='vertical')
+            fig.text(1.025, 0.5,r'Phase', ha='center', va='center', rotation='vertical')
+            fig.subplots_adjust(hspace=0)
+            fig.tight_layout(pad=0.0, w_pad=0.5, h_pad=0.25)
         fig.savefig('res'+plotnum+'.pdf',format='pdf',bbox_inches='tight',pad_inches=0.25)
