@@ -378,7 +378,7 @@ EPHEM               DE440
 CLK                 UNCORR                          
 UNITS               TDB
 TIMEEPH             FB90
-T2CMETHOD           TEMPO
+T2CMETHOD           IAU2000B
 CORRECT_TROPOSPHERE N
 PLANET_SHAPIRO      N
 DILATEFREQ          N
