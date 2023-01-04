@@ -221,7 +221,8 @@ for i in range(3):
                 #freqxshift += 0.05
             else:
                 df = -1
-            if nn=="J0032+6946" or nn=="J0141+6303" or nn=="J0214+5222" or nn=="J1434+7257" or nn=="J2145+2158":
+            more_sig_figs = ["J0032+6946","J0141+6303","J0415+6111","J1434+7257","J1530-2114","J2145+2158"]
+            if nn in more_sig_figs:
                 dig = 2
             plt.text(freqxshift+0.05,shift+0.0,"350 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
                      color='r',alpha=showfreq)
@@ -242,10 +243,8 @@ for i in range(3):
         if profile_fname_820 in all_files:
             y = prof_function(profile_fname_820)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='b',label="820 MHz" if count == 0 else "")
-            moredecimal = ["J0032+6946","J0141+6303","J0214+5222","J0415+6111","J0957−0619","J1434+7257","J1530−2114", \
-                           "J1816+4510","J1929+6630","J1930+6205","J2104+2830","J2115+6702","J2145+2158","J2210+5712", \
-                           "J2354-2250"]
-            if nn in moredecimal:
+            more_sig_figs = ["J0141+6303","J0415+6111","J0957−0619","J1434+7257","J1505-2524","J1530−2114","J1816+4510","J1929+6630","J1930+6205","J2104+2830","J2115+6702","J2145+2158","J2210+5712","J2354-2250"]
+            if nn in more_sig_figs:
                 dig = 2
             if nn=="J2115+6702":
                 dy = -0.2
