@@ -111,7 +111,6 @@ for jj in range(5):
         fig = plt.figure(figsize=(6,2))
         ax = fig.add_subplot(1, 1, 1)
         obs = [freq_bw_rcvr(57.15,80.0,rcvr='LWA1',color='black',zorder=2), \
-               freq_bw_rcvr(327.0,90.0,rcvr='puppi_327',color='purple',zorder=5), \
                freq_bw_rcvr(350.0,100.0,rcvr='guppi',color='r',zorder=4), \
                freq_bw_rcvr(430.0,100.0,rcvr='puppi_430',color='pink',zorder=3), \
                freq_bw_rcvr(820.0,200.0,rcvr='guppi',color='b',zorder=3), \
@@ -136,7 +135,7 @@ for jj in range(5):
 
         # Get phase info
         psr = pretty_psr_name.replace('$','').split()[1]
-        par_fname = f'data/{psr}_fiore+22.par'
+        par_fname = f'data/{psr}_fiore+23.par'
 
         with open(par_fname, 'r') as infile:
             for l in infile.readlines():
@@ -263,7 +262,7 @@ for jj in range(5):
 
             # Get phase info
             psr = pretty_psr_name.replace('$','').split()[1]
-            par_fname = f'data/{psr}_fiore+22.par'
+            par_fname = f'data/{psr}_fiore+23.par'
 
             with open(par_fname, 'r') as infile:
                 for l in infile.readlines():
