@@ -47,32 +47,37 @@ flux_info = np.loadtxt(f"{DATA_PATH}flux.info",dtype="str")
 for i in range(3):
     if i==0:
         flux57   = [ss[1] for ss in flux_info][:-8][:7]+[ss[1] for ss in flux_info][:-8][8:]
-        flux350  = [ss[2] for ss in flux_info][:-8][:7]+[ss[2] for ss in flux_info][:-8][8:]
-        flux430  = [ss[3] for ss in flux_info][:-8][:7]+[ss[3] for ss in flux_info][:-8][8:]
-        flux820  = [ss[4] for ss in flux_info][:-8][:7]+[ss[4] for ss in flux_info][:-8][8:]
-        flux1380 = [ss[5] for ss in flux_info][:-8][:7]+[ss[5] for ss in flux_info][:-8][8:]
-        flux1500 = [ss[6] for ss in flux_info][:-8][:7]+[ss[6] for ss in flux_info][:-8][8:]
-        flux2000 = [ss[7] for ss in flux_info][:-8][:7]+[ss[7] for ss in flux_info][:-8][8:]
+        flux149  = [ss[2] for ss in flux_info][:-8][:7]+[ss[2] for ss in flux_info][:-8][8:]
+        flux350  = [ss[3] for ss in flux_info][:-8][:7]+[ss[3] for ss in flux_info][:-8][8:]
+        flux430  = [ss[4] for ss in flux_info][:-8][:7]+[ss[4] for ss in flux_info][:-8][8:]
+        flux820  = [ss[5] for ss in flux_info][:-8][:7]+[ss[5] for ss in flux_info][:-8][8:]
+        flux1380 = [ss[6] for ss in flux_info][:-8][:7]+[ss[6] for ss in flux_info][:-8][8:]
+        flux1500 = [ss[7] for ss in flux_info][:-8][:7]+[ss[7] for ss in flux_info][:-8][8:]
+        flux2000 = [ss[8] for ss in flux_info][:-8][:7]+[ss[8] for ss in flux_info][:-8][8:]
         names    = [ss[0] for ss in flux_info][:-8][:7]+[ss[0] for ss in flux_info][:-8][8:]
         fig1 = plt.figure()
         gs1 = gridspec.GridSpec(12, 16)
     elif i==1:
         flux57   = [ss[1] for ss in flux_info][13:]
-        flux350  = [ss[2] for ss in flux_info][13:]
-        flux430  = [ss[3] for ss in flux_info][13:]
-        flux820  = [ss[4] for ss in flux_info][13:]
-        flux1380 = [ss[5] for ss in flux_info][13:]
-        flux1500 = [ss[6] for ss in flux_info][13:]
-        flux2000 = [ss[7] for ss in flux_info][13:]
+        flux149  = [ss[2] for ss in flux_info][13:]
+        flux350  = [ss[3] for ss in flux_info][13:]
+        flux430  = [ss[4] for ss in flux_info][13:]
+        flux820  = [ss[5] for ss in flux_info][13:]
+        flux1380 = [ss[6] for ss in flux_info][13:]
+        flux1500 = [ss[7] for ss in flux_info][13:]
+        flux2000 = [ss[8] for ss in flux_info][13:]
         names = [ss[0] for ss in flux_info][13:]
         fig2 = plt.figure()
         gs2 = gridspec.GridSpec(8, 16)
     elif i==2:
-        flux57   = [[ss[1] for ss in flux_info][7]]
-        flux350  = [[ss[2] for ss in flux_info][7]]
-        flux430  = [[ss[3] for ss in flux_info][7]]
-        flux820  = [[ss[4] for ss in flux_info][7]]
-        flux1380 = [[ss[5] for ss in flux_info][7]]
+        flux57   = [flux_info[7][1]]
+        flux149  = [flux_info[7][2]]
+        flux350  = [flux_info[7][3]]
+        flux430  = [flux_info[7][4]]
+        flux820  = [flux_info[7][5]]
+        flux1380 = [flux_info[7][6]]
+        flux1500 = [flux_info[7][7]]
+        flux2000 = [flux_info[7][8]]
         names = [[ss[0] for ss in flux_info][7]]
         fig3 = plt.figure(figsize=(1.5,3.5))
     else:
@@ -116,7 +121,6 @@ for i in range(3):
     count = 0
     phase = np.arange(nbin)/float(nbin)
 
-    print(names)
     for nn,pp,dd,s57,s350,s430,s820,s1380,s1500,s2000 in zip(names,per_u,dm_u,flux57,flux350,flux430,flux820,flux1380,flux1500,flux2000):
 
         profile_fname_57  = f"{DATA_PATH}{nn}_57.15MHz_fiore+23.profile"
@@ -221,9 +225,10 @@ for i in range(3):
                 #freqxshift += 0.05
             else:
                 df = -1
-            more_sig_figs = ["J0032+6946","J0141+6303","J0415+6111","J1434+7257","J1530-2114","J2145+2158"]
-            if nn in more_sig_figs:
-                dig = 2
+            dig = 2
+            fewer_sig_figs = ["J1327+3423","J1505-2524","J1913+3732","J2210+5712"]
+            if nn in fewer_sig_figs:
+                dig = 1
             plt.text(freqxshift+0.05,shift+0.0,"350 MHz",horizontalalignment='left',verticalalignment='bottom',fontsize=7, \
                      color='r',alpha=showfreq)
             plt.text(freqxshift+0.05,shift-0.05+freqyshift,f"{float(s350):.{dig}f} mJy",horizontalalignment='left', \
@@ -243,9 +248,10 @@ for i in range(3):
         if profile_fname_820 in all_files:
             y = prof_function(profile_fname_820)
             plt.plot(phase,np.roll(y,rotate)+shift+offset,c='b',label="820 MHz" if count == 0 else "")
-            more_sig_figs = ["J0141+6303","J0415+6111","J0957−0619","J1434+7257","J1505-2524","J1530−2114","J1816+4510","J1929+6630","J1930+6205","J2104+2830","J2115+6702","J2145+2158","J2210+5712","J2354-2250"]
-            if nn in more_sig_figs:
-                dig = 2
+            dig = 2
+            fewer_sig_figs = ["J1913+3732"]
+            if nn in fewer_sig_figs:
+                dig = 1
             if nn=="J2115+6702":
                 dy = -0.2
             elif nn=="J2210+5712":
