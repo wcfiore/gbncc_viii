@@ -8,7 +8,6 @@ from astropy.coordinates import SkyCoord
 from astropy.time import Time
 import matplotlib as mpl
 import glob
-import sys
     
 class freq_bw:
 
@@ -56,6 +55,15 @@ params = {'backend': 'pdf',
       'figure.figsize'    : fig_size,
       'axes.unicode_minus': True}
 mpl.rcParams.update(params)
+colors = {'blue':    '#377eb8', 
+          'orange':  '#ff7f00',
+          'green':   '#4daf4a',
+          'pink':    '#f781bf',
+          'brown':   '#a65628',
+          'purple':  '#984ea3',
+          'gray':    '#999999',
+          'red':     '#e41a1c',
+          'yellow':  '#dede00'}
 
 fig, axes = plt.subplots(nrows=nrows, ncols=1,sharex=True)
 
@@ -76,11 +84,11 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
         res,err = res*1e3, err*1e3		# Units = microseconds	
         Sband = np.full(len(res),False)
         
-    obs = [freq_bw(150.0,50.0,is_Sband=False,color='black',zorder=2), \
-           freq_bw(350.0,100.0,is_Sband=False,color='r',zorder=3), \
-           freq_bw(820.0,200.0,is_Sband=False,color='b',zorder=2), \
-           freq_bw(1500.0,800.0,is_Sband=False,color='cyan',zorder=4), \
-           freq_bw(2000.0,800.0,is_Sband=True,color='g',zorder=5)]
+    obs = [freq_bw(150.0,50.0,is_Sband=False,color=colors['pink'],zorder=2), \
+           freq_bw(350.0,100.0,is_Sband=False,color=colors['red'],zorder=3), \
+           freq_bw(820.0,200.0,is_Sband=False,color=colors['blue'],zorder=2), \
+           freq_bw(1500.0,800.0,is_Sband=False,color=colors['purple'],zorder=4), \
+           freq_bw(2000.0,800.0,is_Sband=True,color=colors['yellow'],zorder=5)]
 
     check_tot = 0
     
@@ -119,7 +127,7 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
     
     # Plot a vertical line at orbital phase = 0.25
     
-    ax.plot([0.25,0.25],[y_min,y_max],ls='--',color='grey',alpha=0.5,zorder=10)
+    ax.plot([0.25,0.25],[y_min,y_max],ls='--',color='gray',alpha=0.5,zorder=10)
     
     ax.text(0.93,0.9,pretty_psr_name,color='black',rotation=0,size=10,va='center',ha='right',transform=ax.transAxes)
 #     if "all" in rf:

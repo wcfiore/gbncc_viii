@@ -60,7 +60,9 @@ def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux,
     dig = formatting.dig[freq]
     dylabel  = formatting.dylabel[freq]
     
-    if float(flux) >= 10.:
+    if flux=='--':
+        flux_label = False
+    elif float(flux) >= 10.:
         flux_label = f"{int(float(flux))} mJy" 
     else:
         flux_label = f"{float(flux):.{dig}f} mJy"
@@ -103,6 +105,15 @@ params = {"backend": "pdf",
           "figure.figsize" : fig_size,
           "axes.unicode_minus": True}
 mpl.rcParams.update(params)
+pallete = {'blue':    '#377eb8', 
+          'orange':  '#ff7f00',
+          'green':   '#4daf4a',
+          'pink':    '#f781bf',
+          'brown':   '#a65628',
+          'purple':  '#984ea3',
+          'gray':    '#999999',
+          'red':     '#e41a1c',
+          'yellow':  '#dede00'}
 
 fig1 = plt.figure()
 gs1 = gridspec.GridSpec(16, 16, figure=fig1)
@@ -131,7 +142,7 @@ all_freqs  = ["LWA1 57 MHz", "LOFAR 149 MHz", "GBT 350 MHz", "AO 430 MHz", "GBT 
               "GBT 1.5 GHz", "GBT 2 GHz"]
 
 color_dict = {}
-colors = ['black', 'black', 'r', 'orange', 'b', 'cyan', 'cyan', 'g']
+colors = [pallete['gray'], pallete['orange'], pallete['red'], pallete['pink'], pallete['blue'], pallete['purple'], pallete['purple'], pallete['yellow']]
 for freq, color in zip(all_freqs, colors):
     color_dict[freq] = color
 
@@ -150,6 +161,8 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
     freqs = []
     for freq,flux in zip(all_freqs, all_fluxes):
         if flux != '--':
+            freqs.append(freq)
+        if freq == "LOFAR 149 MHz" and name == "J0214+5222":
             freqs.append(freq)
         
     # Profile formatting
