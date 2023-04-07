@@ -103,6 +103,13 @@ for jj in range(4):
               'gray':    '#999999',
               'red':     '#e41a1c',
               'yellow':  '#dede00'}
+    color_57  = colors['gray']
+    color_149 = colors['orange']
+    color_350 = colors['red']
+    color_430 = colors['pink']
+    color_820 = colors['blue']
+    color_L = colors['purple']
+    color_S = colors['yellow']
     
     fig, axes = plt.subplots(nrows=nrows, ncols=1,sharex=True)
 
@@ -124,17 +131,17 @@ for jj in range(4):
             Sband = np.full(len(res),False)
             
         if jj==0:
-            obs = [freq_bw(150.0,50.0,is_Sband=False,color=colors['orange'],zorder=2), \
-                   freq_bw(350.0,100.0,is_Sband=False,color=colors['red'],zorder=3), \
-                   freq_bw(820.0,200.0,is_Sband=False,color=colors['blue'],zorder=2), \
-                   freq_bw(1500.0,800.0,is_Sband=False,color=colors['purple'],zorder=4), \
-                   freq_bw(2000.0,800.0,is_Sband=True,color=colors['yellow'],zorder=5)]
+            obs = [freq_bw(149.0,50.0,is_Sband=False,color=color_149,zorder=2), \
+                   freq_bw(350.0,100.0,is_Sband=False,color=color_350,zorder=3), \
+                   freq_bw(820.0,200.0,is_Sband=False,color=color_820,zorder=2), \
+                   freq_bw(1500.0,800.0,is_Sband=False,color=color_L,zorder=4), \
+                   freq_bw(2000.0,800.0,is_Sband=True,color=color_S,zorder=5)]
         elif jj==1:
-            obs = [freq_bw_rcvr(57.15,80.0,rcvr='LWA1',color=colors['gray'],zorder=2), \
-                freq_bw_rcvr(350.0,100.0,rcvr='guppi',color=colors['red'],zorder=4), \
-                freq_bw_rcvr(430.0,100.0,rcvr='puppi_430',color=colors['pink'],zorder=3), \
-                freq_bw_rcvr(820.0,200.0,rcvr='guppi',color=colors['blue'],zorder=3), \
-                freq_bw_rcvr(1380.0,800.0,rcvr='puppi_1380',color=colors['purple'],zorder=2)]
+            #obs = [freq_bw_rcvr(57.15,80.0,rcvr='LWA1',color=color_57,zorder=2), \
+            obs = [freq_bw_rcvr(350.0,100.0,rcvr='guppi',color=color_350,zorder=4), \
+                freq_bw_rcvr(430.0,100.0,rcvr='puppi_430',color=color_430,zorder=3), \
+                freq_bw_rcvr(820.0,200.0,rcvr='guppi',color=color_820,zorder=3), \
+                freq_bw_rcvr(1380.0,800.0,rcvr='puppi_1380',color=color_L,zorder=2)]
         else:
             obs = [freq_bw(350.0,100.0,color=colors['red']),freq_bw(820.0,200.0,color=colors['blue'])]
 #         else:
@@ -154,6 +161,33 @@ for jj in range(4):
         if ii == 0:
             leg_ax = ax
             top_ax = ax
+            if jj==0:   # this is all to make the errorbars in the legend have caps
+                freqs = ["lofar","350","820","1500","2000"]
+            elif jj==1:
+                freqs = ["350","430","820","1380"]
+            else:
+                freqs = ["350","820"]
+            if "lofar" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_149,mec=color_149,ecolor=color_149, \
+                        label="LOFAR 149 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+            if "350" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_350,mec=color_350,ecolor=color_350, \
+                        label="GBT 350 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+            if "430" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_430,mec=color_430,ecolor=color_430, \
+                        label="AO 430 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+            if "820" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_820,mec=color_820,ecolor=color_820, \
+                        label="GBT 820 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+            if "1380" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_L,mec=color_L,ecolor=color_L, \
+                        label="AO 1380 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+            if "1500" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_L,mec=color_L,ecolor=color_L, \
+                        label="GBT 1500 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+            if "2000" in freqs:
+                ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_S,mec=color_S,ecolor=color_S, \
+                        label="GBT 2000 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
             
 #         if nn=="PSR J1327+3423":
 #             leg_ax = ax
@@ -191,7 +225,10 @@ for jj in range(4):
             check_tot += np.sum(inds)
             
         ylim = 1.1*max([np.abs(r)+np.abs(e) for r,e in zip(res,err)])
-        ax.set_ylim([-ylim,ylim])
+        if nn=="PSR J1327+3423":
+            ax.set_ylim([-ylim,1.15*ylim])
+        else:
+            ax.set_ylim([-ylim,ylim])
         ax_R.set_ylim([-ylim/p0.to(u.us).value,ylim/p0.to(u.us).value])
         ax.minorticks_on()
         ax_R.minorticks_on()
@@ -202,18 +239,24 @@ for jj in range(4):
         ax.text(0.93,0.9,pretty_psr_name,color='black',rotation=0,size=10,va='center',ha='right',transform=ax.transAxes)
         print(str(check_tot)+'/'+str(len(res))+' residuals plotted.')
 
+    # this makes the fake points from earlier show up in the legend with caps 
+    handles, labels = leg_ax.get_legend_handles_labels()
+    by_label = dict(zip(reversed(labels), reversed(handles)))
+
     if jj==0 or jj==1:
-        leg = leg_ax.legend(numpoints=1,edgecolor='black',loc=4,framealpha=1.0).set_zorder(20)
+        leg = leg_ax.legend(reversed(by_label.values()),reversed(by_label.keys()),numpoints=1,edgecolor='black',loc=4, \
+                            framealpha=1.0).set_zorder(20)
     else:
-        leg = leg_ax.legend(numpoints=1,edgecolor='black',loc=4,bbox_to_anchor=(1.0,0.01),framealpha=1.0).set_zorder(20)
+        leg = leg_ax.legend(reversed(by_label.values()),reversed(by_label.keys()),numpoints=1,edgecolor='black',loc=4, \
+                            bbox_to_anchor=(1.0,0.01),framealpha=1.0).set_zorder(20)
 
     # Calculate *global* xlims
     #x_lims = [min_yr,max_yr]
-    alt = True # different time ranges for each plot
+    alt = False # different time ranges for each plot
     if jj==0:
         x_lims = [2009.75,2022.75]
     elif jj==1:
-        x_lims = [2012.0,2021.0]
+        x_lims = [2013.5,2021.0]
     elif jj==2:
         x_lims = [2012.0,2017.75]
     elif jj==3:

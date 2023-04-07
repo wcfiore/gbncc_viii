@@ -84,7 +84,7 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
         res,err = res*1e3, err*1e3		# Units = microseconds	
         Sband = np.full(len(res),False)
         
-    obs = [freq_bw(150.0,50.0,is_Sband=False,color=colors['pink'],zorder=2), \
+    obs = [freq_bw(149.0,50.0,is_Sband=False,color=colors['pink'],zorder=2), \
            freq_bw(350.0,100.0,is_Sband=False,color=colors['red'],zorder=3), \
            freq_bw(820.0,200.0,is_Sband=False,color=colors['blue'],zorder=2), \
            freq_bw(1500.0,800.0,is_Sband=False,color=colors['purple'],zorder=4), \
@@ -98,9 +98,21 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
     par_fname = f'data/{psr}_tdb.par'
     tim_fname = f'data/{psr}_fiore+23.tim'
     
+    y_max = 1.1*max([np.abs(r)+np.abs(e) for r,e in zip(res,err)])
+    
     if "all" in rf:
+        y_min = 1.1*min([r-np.abs(e) for r,e in zip(res,err)])
         leg_ax = ax
-        tim_fname = 'data/J1816+4510_all.tim'        
+        tim_fname = 'data/J1816+4510_all.tim'
+        # put fake points so the legend has caps on all the errorbars
+        ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=colors['orange'],mec=colors['orange'],ecolor=colors['orange'], \
+                        label="LOFAR 149 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+        ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=colors['yellow'],mec=colors['yellow'],ecolor=colors['yellow'], \
+                        label="GBT 2000 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+    else:
+        y_min = -y_max
+        
+    ax.set_ylim([y_min,y_max])
     
     mo = model.get_model(par_fname)
     to = toa.get_TOAs(tim_fname,model=mo)
@@ -110,21 +122,11 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
     
     for o in obs:
         inds = o.in_bw_inds(frq)*o.Sband_check_inds(Sband)
-
         ax.errorbar(orb_phase[inds],res[inds],yerr=err[inds],fmt='o',mfc=o.color,mec=o.color,ecolor=o.color, \
                     label=o.label,ms=1.1,capsize=0.75,elinewidth=0.25,zorder=o.zorder)
 
         check_tot += np.sum(inds)
-
-    y_max = 1.1*max([np.abs(r)+np.abs(e) for r,e in zip(res,err)])
-    
-    if "all" in rf:
-        y_min = 1.1*min([r-np.abs(e) for r,e in zip(res,err)])
-    else:
-        y_min = -y_max
-    
-    ax.set_ylim([y_min,y_max])
-    
+        
     # Plot a vertical line at orbital phase = 0.25
     
     ax.plot([0.25,0.25],[y_min,y_max],ls='--',color='gray',alpha=0.5,zorder=10)
@@ -137,8 +139,13 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
 fig.subplots_adjust(hspace=0)
 fig.tight_layout(pad=0.0, w_pad=0.5, h_pad=0.25)
 
+# once again assuring the legend errorbars have caps here
+handles, labels = leg_ax.get_legend_handles_labels()
+by_label = dict(zip(reversed(labels), reversed(handles)))
+
 # Add legend to the appropriate plot
-leg = leg_ax.legend(numpoints=1,ncol=2,edgecolor='black',loc=6,bbox_to_anchor=(0.5,0.5),framealpha=1.0).set_zorder(20)
+leg = leg_ax.legend(reversed(by_label.values()),reversed(by_label.keys()),numpoints=1,ncol=2,edgecolor='black',loc=6, \
+                    bbox_to_anchor=(0.5,0.5),framealpha=1.0).set_zorder(20)
 
 # Calculate *global* xlims
 x_lims = [0.0,1.0]
