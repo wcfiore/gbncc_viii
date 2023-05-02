@@ -17,9 +17,9 @@ class freq_bw:
         self.color    = color
         self.zorder   = zorder
         if freq < 200.0:
-            self.label = 'LOFAR '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (LOFAR)'
         else:
-            self.label = 'GBT '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (GBT)'
 
     def in_bw_inds(self,freq_arr):
         lo_test = freq_arr > self.flo
@@ -42,11 +42,11 @@ class freq_bw_rcvr:
         self.color  = color
         self.zorder = zorder
         if 'guppi' in rcvr:
-            self.label = 'GBT '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (GBT)'
         elif 'LWA1' in rcvr:
-            self.label = 'LWA1 '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (LWA1)'
         elif 'puppi' in rcvr:
-            self.label = 'AO '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (AO)'
         else:
             self.label = str(int(freq))+' MHz'
 
@@ -87,7 +87,7 @@ for jj in range(4):
     params = {'backend': 'pdf',
               'font.size'         : 14*fig_width/8.5,
               'axes.labelsize'    : 14*fig_width/8.5,
-              'legend.fontsize'   : 12*fig_width/8.5,
+              'legend.fontsize'   : 11*fig_width/8.5,
               'xtick.labelsize'   : 14*fig_width/8.5,
               'ytick.labelsize'   : 14*fig_width/8.5,
               'text.usetex'       : True,
@@ -169,25 +169,25 @@ for jj in range(4):
                 freqs = ["350","820"]
             if "lofar" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_149,mec=color_149,ecolor=color_149, \
-                        label="LOFAR 149 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="149 MHz (LOFAR)",ms=1.5,capsize=1.,elinewidth=0.5)
             if "350" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_350,mec=color_350,ecolor=color_350, \
-                        label="GBT 350 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="350 MHz (GBT)",ms=1.5,capsize=1.,elinewidth=0.5)
             if "430" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_430,mec=color_430,ecolor=color_430, \
-                        label="AO 430 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="430 MHz (AO)",ms=1.5,capsize=1.,elinewidth=0.5)
             if "820" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_820,mec=color_820,ecolor=color_820, \
-                        label="GBT 820 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="820 MHz (GBT)",ms=1.5,capsize=1.,elinewidth=0.5)
             if "1380" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_L,mec=color_L,ecolor=color_L, \
-                        label="AO 1380 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="1380 MHz (AO)",ms=1.5,capsize=1.,elinewidth=0.5)
             if "1500" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_L,mec=color_L,ecolor=color_L, \
-                        label="GBT 1500 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="1500 MHz (GBT)",ms=1.5,capsize=1.,elinewidth=0.5)
             if "2000" in freqs:
                 ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=color_S,mec=color_S,ecolor=color_S, \
-                        label="GBT 2000 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="2000 MHz (GBT)",ms=1.5,capsize=1.,elinewidth=0.5)
             
 #         if nn=="PSR J1327+3423":
 #             leg_ax = ax

@@ -41,9 +41,15 @@ class prof_formatting:
         self.dylabel = dylabel
         self.fontsize = fontsize
 
-def prof_function(file, max_prof=0.4):
+def prof_function(file, nbin, max_prof=0.4):
 
     x,y,z,profile = np.loadtxt(file,dtype='float',unpack=True,skiprows=1)
+    
+    if len(profile)==nbin:
+        pass
+    else:
+        scrunch_factor = len(profile)//nbin
+        profile = (profile[::scrunch_factor] + profile[1::scrunch_factor]) / 2
 
     # Roughly identify off-pulse region
     init_median = np.median(profile)
@@ -56,7 +62,7 @@ def prof_function(file, max_prof=0.4):
     return profile
 
 def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux, color, nbin=128):
-    y = prof_function(profile_fname, max_prof=max_prof)
+    y = prof_function(profile_fname, nbin=nbin, max_prof=max_prof)
     dig = formatting.dig[freq]
     dylabel  = formatting.dylabel[freq]
     
@@ -67,6 +73,7 @@ def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux,
     else:
         flux_label = f"{float(flux):.{dig}f} mJy"
     
+    print(formatting.freqs)
     nfreq = len(formatting.freqs)
     
     if nfreq <= 2:
@@ -77,12 +84,10 @@ def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux,
     else:
         ax2.plot(phases,np.roll(y,formatting.rotate)+shift,c=color)
         ax2.plot(phases,np.roll(y,formatting.rotate)+shift+0.25*max_prof,c=color,alpha=0.0)
-        tel  = freq.split()[0]
-        freq = f"{freq.split()[1]} {freq.split()[2]}"
         if freq == "149 MHz":
             dylabel -= 0.04
-        ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.08,tel,horizontalalignment='left', \
-                 verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
+        #ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.08,tel,horizontalalignment='left', \
+        #         verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
         ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.04,freq,horizontalalignment='left', \
                  verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
         if freq != "149 MHz":
@@ -138,8 +143,8 @@ dms = []
 
 Formatting_Dict = {}
 
-all_freqs  = ["LWA1 57 MHz", "LOFAR 149 MHz", "GBT 350 MHz", "AO 430 MHz", "GBT 820 MHz", "AO 1.4 GHz", \
-              "GBT 1.5 GHz", "GBT 2 GHz"]
+all_freqs  = ["57 MHz", "149 MHz", "350 MHz", "430 MHz", "820 MHz", "1.4 GHz", \
+              "1.5 GHz", "2 GHz"]
 
 color_dict = {}
 colors = [pallete['gray'], pallete['orange'], pallete['red'], pallete['pink'], pallete['blue'], pallete['purple'], pallete['purple'], pallete['yellow']]
@@ -162,7 +167,7 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
     for freq,flux in zip(all_freqs, all_fluxes):
         if flux != '--':
             freqs.append(freq)
-        if freq == "LOFAR 149 MHz" and name == "J0214+5222":
+        if freq == "149 MHz" and name == "J0214+5222":
             freqs.append(freq)
         
     # Profile formatting
@@ -274,18 +279,18 @@ for name,period,dm,s350,s820 in zip(names,periods,dms,flux350,flux820):
     max_prof = 0.5
     shift = formatting.shift+formatting.offset
     
-    if "GBT 350 MHz" in freqs:
+    if "350 MHz" in freqs:
         plot_profile(profile_fname=profile_fname_350, max_prof=max_prof, phases=phases, formatting=formatting, shift=shift, \
-                         freq="GBT 350 MHz", flux=s350, color=color_dict["GBT 350 MHz"])
+                         freq="350 MHz", flux=s350, color=color_dict["350 MHz"], nbin=nbin)
     else:
-        y = prof_function(profile_fname_820, max_prof=max_prof)
+        y = prof_function(profile_fname_820, max_prof=max_prof, nbin=nbin)
         ax1.plot(phases,np.roll(y,formatting.rotate)+shift, alpha=0.0)
         
     shift += formatting.dshift
     
-    if "GBT 820 MHz" in freqs:
+    if "820 MHz" in freqs:
         plot_profile(profile_fname=profile_fname_820, max_prof=max_prof, phases=phases, formatting=formatting, shift=shift, \
-                     freq="GBT 820 MHz", flux=s820, color=color_dict["GBT 820 MHz"])
+                     freq="820 MHz", flux=s820, color=color_dict["820 MHz"], nbin=nbin)
         
     ax1.set_ylim(-0.1,1.25)
     count += 1
@@ -359,13 +364,13 @@ zip(names,periods,dms,flux57,flux149,flux350,flux430,flux820,flux1380,flux1500,f
     for freq,profile_fname,flux,color in zip(all_freqs, profile_fnames, fluxes, colors):
         if freq in freqs:
             plot_profile(profile_fname=profile_fname, max_prof=max_prof, phases=phases, formatting=formatting, shift=shift, \
-                     freq=freq, flux=flux, color=color_dict[freq])
+                     freq=freq, flux=flux, color=color_dict[freq], nbin=nbin)
         elif freq == all_freqs[-1]:
             break
         else:
-            y = prof_function(profile_fname_820, max_prof=max_prof)
+            y = prof_function(profile_fname_820, max_prof=max_prof, nbin=nbin)
             ax2.plot(phases,np.roll(y,formatting.rotate)+shift, alpha=0.0)
-        if freq == "LWA1 57 MHz" or freq == "AO 1.4 GHz":
+        if freq == "57 MHz" or freq == "1.4 GHz":
             continue
         else:
             shift += formatting.dshift

@@ -8,7 +8,6 @@ POSEPOCH       56973.9997855631219
 DMEPOCH        56974                       
 DM             22.036926349355679617     1 
 PMRA           9.7900875670237979716     1 
-PMDEC          1.725299581925872286      1 
 BINARY         BT
 PB             512.03976645725988642     1 
 T0             56638.64562544054052      1 
@@ -21,15 +20,13 @@ TZRMJD         56972.862630373754715
 TZRFRQ         148.92600230912709279    
 TZRSITE        t   
 TRES           -nan         
-EPHVER         2                           
 NE_SW          4                           
 CLK            TT(BIPM2021)
-MODE 1
 UNITS          TDB
 TIMEEPH        FB90
 DILATEFREQ     N
 PLANET_SHAPIRO N
-T2CMETHOD      TEMPO
+T2CMETHOD      IAU2000B
 CORRECT_TROPOSPHERE  N
 EPHEM          DE440
 NITS           1

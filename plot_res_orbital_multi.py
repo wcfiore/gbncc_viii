@@ -18,9 +18,9 @@ class freq_bw:
         self.color    = color
         self.zorder   = zorder
         if freq < 200.0:
-            self.label = 'LOFAR '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (LOFAR)'
         else:
-            self.label = 'GBT '+str(int(freq))+' MHz'
+            self.label = str(int(freq))+' MHz (GBT)'
 
     def in_bw_inds(self,freq_arr):
         lo_test = freq_arr > self.flo
@@ -48,7 +48,7 @@ fig_size = [fig_width,fig_height]
 params = {'backend': 'pdf',
       'font.size'         : 14*fig_width/8.5,
       'axes.labelsize'    : 14*fig_width/8.5,
-      'legend.fontsize'   : 11*fig_width/8.5,
+      'legend.fontsize'   : 10.5*fig_width/8.5,
       'xtick.labelsize'   : 14*fig_width/8.5,
       'ytick.labelsize'   : 14*fig_width/8.5,
       'text.usetex'       : True,
@@ -106,9 +106,9 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
         tim_fname = 'data/J1816+4510_all.tim'
         # put fake points so the legend has caps on all the errorbars
         ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=colors['orange'],mec=colors['orange'],ecolor=colors['orange'], \
-                        label="LOFAR 149 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="149 MHz (LOFAR)",ms=1.5,capsize=1.,elinewidth=0.5)
         ax.errorbar(0.0,res[0],yerr=err[0],fmt='o',mfc=colors['yellow'],mec=colors['yellow'],ecolor=colors['yellow'], \
-                        label="GBT 2000 MHz",ms=1.5,capsize=1.,elinewidth=0.5)
+                        label="2000 MHz (GBT)",ms=1.5,capsize=1.,elinewidth=0.5)
     else:
         y_min = -y_max
         
@@ -145,7 +145,7 @@ by_label = dict(zip(reversed(labels), reversed(handles)))
 
 # Add legend to the appropriate plot
 leg = leg_ax.legend(reversed(by_label.values()),reversed(by_label.keys()),numpoints=1,ncol=2,edgecolor='black',loc=6, \
-                    bbox_to_anchor=(0.5,0.5),framealpha=1.0).set_zorder(20)
+                    bbox_to_anchor=(0.485,0.5),framealpha=1.0).set_zorder(20)
 
 # Calculate *global* xlims
 x_lims = [0.0,1.0]
