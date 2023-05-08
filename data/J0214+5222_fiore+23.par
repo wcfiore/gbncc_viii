@@ -1,39 +1,58 @@
-PSRJ           J0214+5222
-RAJ             02:14:55.2744678         1 
-DECJ           +52:22:40.90771           1 
-F0             40.691271761863113149     1 
-F1             -4.9004275554109637325e-16 1 
-PEPOCH         56973.9997855631219         
-POSEPOCH       56973.9997855631219         
-DMEPOCH        56974                       
-DM             22.036911173486692414     1 
-PMRA           9.866239860495743706      1 
-BINARY         BT
-PB             512.03976613086143899     1 
-T0             56638.645597637107844     1 
-A1             174.56575362311691467     1 
-OM             210.59101421801630857     1 
-ECC            0.0053279612866374578898  1 
-START          55353.902920857100082       
-FINISH         58594.694841203955797       
-TZRMJD         56972.862630373765246       
-TZRFRQ         148.92600230912709279    
-TZRSITE        t   
-TRES           -nan         
-EPHVER         5                           
-NE_SW          4                           
-CLK            TT(BIPM2021)
-MODE 1
-UNITS          TDB
-TIMEEPH        IF99
-DILATEFREQ     Y
-PLANET_SHAPIRO Y
-T2CMETHOD      IAU2000B
-CORRECT_TROPOSPHERE  Y
-EPHEM          DE440
-NITS           1
-NTOA           0
-CHI2R          -nan 0
-JUMP -fe stovall14_350 -0.0096421497812763 1
-JUMP -fe stovall14_820 -0.0091173420793237 1
-JUMP -fe lofar -0.0029840150154752 1
+# Created: 2023-05-08T14:46:46.074010
+# PINT_version: 0+untagged.7004.g55c4e68.dirty
+# User: william
+# Host: Williams-MacBook-Pro-5.local
+# OS: macOS-10.16-x86_64-i386-64bit
+# Format: pint
+PSRJ                           J0214+5222
+EPHEM                               DE440
+CLK                          TT(BIPM2021)
+UNITS                                 TDB
+START              55353.9031101743748264
+FINISH             58594.6950807703497106
+TIMEEPH                              FB90
+T2CMETHOD                        IAU2000B
+DILATEFREQ                              N
+DMDATA                                  N
+NTOA                                  951
+CHI2                                  0.0
+RAJ                      2:14:55.27454936 1 0.00023533039168075455
+DECJ                    52:22:40.90738711 1 0.00310532450234894935
+PMRA                    9.022612727035908 1 1.2393682466639548
+PMDEC                                 0.0
+PX                                    0.0
+POSEPOCH           56973.9997855631219000
+F0                   40.69127176186452417 1 4.3945331668711120158e-12
+F1              -4.900382406151600922e-16 1 6.521787796877837228e-20
+PEPOCH             56973.9997855631219000
+TZRMJD             56972.8626303737652431
+TZRSITE                                 t
+TZRFRQ                 148.92600230912709
+JUMP            -fe stovall14_350     -0.009637278306908914 1 1.653768519584783e-05
+JUMP            -fe stovall14_820     -0.009121865714919516 1 2.044683563896908e-05
+JUMP            -fe lofar     -0.002951004480185493 1 5.179997298492122e-05
+CORRECT_TROPOSPHERE                         Y
+PLANET_SHAPIRO                          Y
+NE_SW                                 4.0
+SWM                                   0.0
+DM                  22.037090516833739715 1 0.00028524586412557762253
+DMEPOCH            56974.0000000000000000
+BINARY                               ELL1 
+# ELL1 with Roemer terms up to O(e^3)
+PB                   512.0397668550789806 1 1.8992142508353639922e-06
+PBDOT                                 0.0
+A1                     174.56576177284066 1 4.772031628550896e-06
+A1DOT             -2.0961379184642469e-13 1 6.089173487371765e-14
+# EDOT                                  0.0
+# OMDOT                                 0.0
+TASC               56339.1151215886250512 1 3.8920057194482035235e-06
+EPS1            -0.0027114480981863046628 1 5.1562403776751971513e-08
+EPS2             -0.004586405072729624759 1 5.5660468027942737215e-08
+EPS1DOT                              -0.0
+EPS2DOT                               0.0
+# ECC              0.0053279510395946923553
+# OM                   210.5912593099934139
+EFAC            -fe stovall14_350                      1.05
+EFAC            -fe stovall14_820                      1.05
+EFAC            -fe fiore23                      1.05
+EFAC            -fe lofar                      1.05

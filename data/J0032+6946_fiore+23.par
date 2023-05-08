@@ -1,35 +1,53 @@
-PSRJ           J0032+6946
-RAJ             00:32:41.2476829         1 
-DECJ           +69:46:28.04702           1 
-F0             27.171119572492324894     1 
-F1             -2.6500566021270870942e-15 1 
-PEPOCH         56735.999789253358948       
-POSEPOCH       56735.999789253358948       
-DMEPOCH        56736                       
-DM             79.998801421916444089     1 
-BINARY         BT
-PB             527.6213158366372315      1 
-T0             56615.350301150749335     1 
-A1             178.67476825039830225     1 
-OM             147.52535691804892484     1 
-ECC            0.00053181404263757579377 1 
-START          55169.178112859273543        4.6036000586604156346e-4943
-FINISH         58303.385366170385364       
-TZRMJD         56909.69854269149479        
-TZRFRQ         377.69900585629776055    
-TZRSITE        1   
-TRES           -nan         
-EPHVER         5                           
-NE_SW          4                           
-CLK            TT(BIPM2021)
-MODE 1
-UNITS          TDB
-TIMEEPH        IF99
-DILATEFREQ     Y
-PLANET_SHAPIRO Y
-T2CMETHOD      IAU2000B
-CORRECT_TROPOSPHERE  Y
-EPHEM          DE440
-NITS           1
-NTOA           0
-CHI2R          -nan 0
+# Created: 2023-05-08T14:39:10.239044
+# PINT_version: 0+untagged.7004.g55c4e68.dirty
+# User: william
+# Host: Williams-MacBook-Pro-5.local
+# OS: macOS-10.16-x86_64-i386-64bit
+# Format: pint
+PSRJ                           J0032+6946
+EPHEM                               DE440
+CLK                          TT(BIPM2021)
+UNITS                                 TDB
+START              55169.1782993123487384 0 4.60360006e-4943
+FINISH             58303.3856012199645139
+TIMEEPH                              FB90
+T2CMETHOD                        IAU2000B
+DILATEFREQ                              N
+DMDATA                                  N
+NTOA                                 1430
+CHI2                                  0.0
+RAJ                      0:32:41.24767642 1 0.00028037572295695594
+DECJ                    69:46:28.04696007 1 0.00174715386267156048
+PMRA                                  0.0
+PMDEC                                 0.0
+PX                                    0.0
+POSEPOCH           56735.9997892533589480
+F0                  27.171119572492296985 1 2.5374875122442672009e-12
+F1              -2.6500562977923198265e-15 1 2.984795952200575703e-20
+PEPOCH             56735.9997892533589480
+CORRECT_TROPOSPHERE                         Y
+PLANET_SHAPIRO                          Y
+NE_SW                                 4.0
+SWM                                   0.0
+DM                   79.99880681617099821 1 0.00021090991909584176113
+DMEPOCH            56736.0000000000000000
+BINARY                               ELL1 
+# ELL1 with Roemer terms up to O(e^3)
+PB                  527.62131581486568344 1 1.5390150794623401917e-06
+PBDOT                                 0.0
+A1                     178.67476819768592 1 2.9225265949892706e-06
+A1DOT                                 0.0
+# EDOT                                  0.0
+# OMDOT                                 0.0
+TASC               56399.1349588295210467 1 4.1179997237445895565e-06
+EPS1             0.0002855447238800778033 1 1.5851617339544742999e-08
+EPS2            -0.00044865259588701544365 1 3.0307463729955126866e-08
+EPS1DOT                               0.0
+EPS2DOT                              -0.0
+# ECC             0.00053181288169045648067
+# OM                   147.5253059075892242
+EFAC            -fe GUPPI_350                      1.08
+EFAC            -fe GUPPI_820                      1.08
+TZRMJD             56909.6985426914947916
+TZRSITE                                 1
+TZRFRQ                  377.6990058562978
