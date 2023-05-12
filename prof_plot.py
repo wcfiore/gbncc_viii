@@ -28,12 +28,13 @@ def get_period_and_dm_from_file(infile):
     return period_label, DM_label
 
 class prof_formatting:
-    def __init__(self, name, shift, dshift, offset, rotate, freqxshift, freqyshift, dig, freqs, dylabel, fontsize):
+    def __init__(self, name, shift, dshift, offset, rotate, rotate_149, freqxshift, freqyshift, dig, freqs, dylabel, fontsize):
         self.name = name
         self.shift = shift
         self.dshift = dshift
         self.offset = offset
         self.rotate = rotate
+        self.rotate_149 = rotate_149
         self.freqxshift = freqxshift
         self.freqyshift = freqyshift
         self.dig = dig
@@ -73,7 +74,6 @@ def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux,
     else:
         flux_label = f"{float(flux):.{dig}f} mJy"
     
-    print(formatting.freqs)
     nfreq = len(formatting.freqs)
     
     if nfreq <= 2:
@@ -82,10 +82,13 @@ def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux,
         ax1.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel,flux_label, \
                  horizontalalignment='left',verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
     else:
-        ax2.plot(phases,np.roll(y,formatting.rotate)+shift,c=color)
-        ax2.plot(phases,np.roll(y,formatting.rotate)+shift+0.25*max_prof,c=color,alpha=0.0)
         if freq == "149 MHz":
             dylabel -= 0.04
+            rotate = formatting.rotate + formatting.rotate_149
+        else:
+            rotate = formatting.rotate
+        ax2.plot(phases,np.roll(y,rotate)+shift,c=color)
+        ax2.plot(phases,np.roll(y,rotate)+shift+0.25*max_prof,c=color,alpha=0.0)
         #ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.08,tel,horizontalalignment='left', \
         #         verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
         ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.04,freq,horizontalalignment='left', \
@@ -167,13 +170,14 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
     for freq,flux in zip(all_freqs, all_fluxes):
         if flux != '--':
             freqs.append(freq)
-        if freq == "149 MHz" and name == "J0214+5222":
+        if freq == "149 MHz" and name in ["J0214+5222","J1816+4510"]:
             freqs.append(freq)
         
     # Profile formatting
     shift  = 0.0
     dshift = 0.5
     rotate = 0.0
+    rotate_149 = 0
     offset = 0.0
     showfreq = 0
     freqxshift = 0.0
@@ -199,6 +203,8 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
     elif name=="J0636+5128":
         rotate = 10
         freqyshift -= 0.02
+    elif name=="J0957-0619":
+        dylabel_350 += 0.1
     elif name=="J1239+3239":
         dylabel_820 += 0.05
     elif name=="J1327+3423":
@@ -209,14 +215,16 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
         dylabel_1500 = 0.05
     elif name=="J1816+4510":
         rotate = 32
+        rotate_149 = 38
         freqyshift += 0.005
+        dylabel_149 = 0.055
         dylabel_350 = 0.033
     elif name=="J2115+6702":
         dylabel_350 = 0.1
     elif name=="J2145+2158":
         dylabel_350 = 0.07
     elif name=="J2210+5712":
-        dylabel_350 = 0.15
+        dylabel_350 = 0.2
     elif name=="J2326+6243":
         dylabel_350 = 0.09
     elif name=="J2354-2250":
@@ -245,8 +253,8 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
 #         verticalalignment='bottom'
         
     Formatting_Dict[name] = prof_formatting(name=name,shift=shift,dshift=dshift,offset=offset,rotate=rotate, \
-                                            freqxshift=freqxshift,freqyshift=freqyshift,dig=dig_dict,freqs=freqs, \
-                                            dylabel=dylabel_dict,fontsize=fontsize)
+                                            rotate_149=rotate_149,freqxshift=freqxshift,freqyshift=freqyshift,dig=dig_dict, \
+                                            freqs=freqs,dylabel=dylabel_dict,fontsize=fontsize)
 
 nbin = 128
 midbin = nbin/2

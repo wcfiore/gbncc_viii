@@ -3,7 +3,6 @@ import pint.models as model
 import pint.derived_quantities as dq
 import matplotlib.pyplot as plt
 from astropy import units as u
-from astropy.coordinates import SkyCoord
 from astropy.time import Time
 import matplotlib as mpl
 import glob
@@ -125,9 +124,12 @@ for jj in range(4):
             day = np.array([float(x) for x in day])
             frq = np.array([float(x) for x in frq])
             Sband = fname == 'guppi_56452_J0636+51_0'
+        elif nn in ['PSR J0032+6946','PSR J0214+5222']:
+            res, err, day, frq = np.loadtxt(rf,dtype='float',unpack=True) # res, err already in us
+            Sband = np.full(len(res),False)
         else:
             res, err, day, frq = np.loadtxt(rf,dtype='float',unpack=True,usecols=[1,2,3,5])
-            res,err = res*1e3, err*1e3		# Units = microseconds	
+            res,err = res*1e3, err*1e3  #convert ms to us
             Sband = np.full(len(res),False)
             
         if jj==0:
