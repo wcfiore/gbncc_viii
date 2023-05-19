@@ -12,19 +12,19 @@ def get_period_and_dm_from_file(infile):
             period = 1./frequency
             period_sec = period.to(u.s).value
             period_ms = period.to(u.ms).value
-            if period < 10.*u.ms:
-                period_label = f"{round(period_ms,1)} ms"
-            elif period > 999.99*u.ms:
-                period_label = f"{round(period_sec,2)} s"
+            if period > 999.99*u.ms:
+                period_label = f"{round(period_sec,2)}\,s"
+            elif period > 99.99*u.ms:
+                period_label = f"{int(round(period_ms,0))}\,ms"
             else:
-                period_label = f"{int(round(period_ms,0))} ms"
+                period_label = f"{round(period_ms,1)}\,ms"
         elif l.startswith("DM "):
             DM = float(l.split()[1])
             if DM <= 9.9:
                 DM_rounded = round(DM,1)
             else:
                 DM_rounded = int(round(DM,0))
-            DM_label = f"{DM_rounded} pc/cm$^3$"
+            DM_label = f"{DM_rounded}"+"\,pc\,cm$^{-3}$"
     return period_label, DM_label
 
 class prof_formatting:
@@ -82,18 +82,19 @@ def plot_profile(profile_fname, max_prof, phases, formatting, shift, freq, flux,
         ax1.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel,flux_label, \
                  horizontalalignment='left',verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
     else:
+        rotate = formatting.rotate
         if freq == "149 MHz":
             dylabel -= 0.04
-            rotate = formatting.rotate + formatting.rotate_149
-        else:
-            rotate = formatting.rotate
+            rotate += formatting.rotate_149
+        elif freq == "57 MHz":
+            dylabel -= 0.04
         ax2.plot(phases,np.roll(y,rotate)+shift,c=color)
         ax2.plot(phases,np.roll(y,rotate)+shift+0.25*max_prof,c=color,alpha=0.0)
         #ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.08,tel,horizontalalignment='left', \
         #         verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
         ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel+0.04,freq,horizontalalignment='left', \
                  verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
-        if freq != "149 MHz":
+        if freq not in ["57 MHz", "149 MHz"]:
             ax2.text(formatting.freqxshift,shift+formatting.freqyshift+dylabel,flux_label, \
                  horizontalalignment='left',verticalalignment='bottom',fontsize=formatting.fontsize,color=color)
 
@@ -131,15 +132,15 @@ DATA_PATH = "data/" # using (nearly identical) old profiles since new ones are n
 all_files = glob.glob(f"{DATA_PATH}*.profile")
 flux_info = np.loadtxt(f"{DATA_PATH}flux.info",dtype="str")
 
-flux57   = [ss[1] for ss in flux_info]
-flux149  = [ss[2] for ss in flux_info]
-flux350  = [ss[3] for ss in flux_info]
-flux430  = [ss[4] for ss in flux_info]
-flux820  = [ss[5] for ss in flux_info]
-flux1380 = [ss[6] for ss in flux_info]
-flux1500 = [ss[7] for ss in flux_info]
-flux2000 = [ss[8] for ss in flux_info]
-names    = [ss[0] for ss in flux_info]
+flux57   = [ss[1]  for ss in flux_info]
+flux149  = [ss[5]  for ss in flux_info]
+flux350  = [ss[6]  for ss in flux_info]
+flux430  = [ss[7]  for ss in flux_info]
+flux820  = [ss[8]  for ss in flux_info]
+flux1380 = [ss[9]  for ss in flux_info]
+flux1500 = [ss[10]  for ss in flux_info]
+flux2000 = [ss[11] for ss in flux_info]
+names    = [ss[0]  for ss in flux_info]
         
 periods = []
 dms = []
@@ -168,9 +169,8 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
     all_fluxes = [s57, s149, s350, s430, s820, s1380, s1500, s2000]
     freqs = []
     for freq,flux in zip(all_freqs, all_fluxes):
-        if flux != '--':
-            freqs.append(freq)
-        if freq == "149 MHz" and name in ["J0214+5222","J1816+4510"]:
+        append = flux != '--' or freq == "57 MHz" and name == "J1327+3423" or freq == "149 MHz" and name in ["J0214+5222","J1816+4510"]
+        if append:
             freqs.append(freq)
         
     # Profile formatting
@@ -200,6 +200,7 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
     dig_2000 = 2
     if name=="J0415+6111":
         dylabel_350 = 0.1
+        shift = 0.08
     elif name=="J0636+5128":
         rotate = 10
         freqyshift -= 0.02
@@ -221,12 +222,16 @@ for name,s57,s149,s350,s430,s820,s1380,s1500,s2000 in zip(names,flux57,flux149,f
         dylabel_350 = 0.033
     elif name=="J2115+6702":
         dylabel_350 = 0.1
+        shift = 0.08
     elif name=="J2145+2158":
         dylabel_350 = 0.07
+        shift = 0.05
     elif name=="J2210+5712":
         dylabel_350 = 0.2
+        shift = 0.08
     elif name=="J2326+6243":
         dylabel_350 = 0.09
+        shift = 0.05
     elif name=="J2354-2250":
         freqyshift -= 0.05
         

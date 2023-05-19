@@ -74,14 +74,18 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
     print(pretty_psr_name)
 
     if nn=='PSR J0636+5128':
-        res, err, frq, fname = np.loadtxt(rf,dtype=str,unpack=True,usecols=[1,2,5,6])
-        res = np.array([float(x)*1e3 for x in res]) #convert ms to us
-        err = np.array([float(x)*1e3 for x in err]) #convert ms to us
-        frq = np.array([float(x) for x in frq])
-        Sband = fname == 'guppi_56452_J0636+51_0'
+            res, err, day, frq, fname = np.loadtxt(rf,dtype=str,unpack=True,usecols=[1,2,3,5,6])
+            res = np.array([float(x)*1e3 for x in res]) #convert ms to us
+            err = np.array([float(x)*1e3 for x in err]) #convert ms to us
+            day = np.array([float(x) for x in day])
+            frq = np.array([float(x) for x in frq])
+            Sband = fname == 'guppi_56452_J0636+51_0'
+    elif nn in ['PSR J0032+6946','PSR J0214+5222']:
+        res, err, day, frq = np.loadtxt(rf,dtype='float',unpack=True) # res, err already in us
+        Sband = np.full(len(res),False)
     else:
-        res, err, frq = np.loadtxt(rf,dtype='float',unpack=True,usecols=[1,2,5])
-        res,err = res*1e3, err*1e3		# Units = microseconds	
+        res, err, day, frq = np.loadtxt(rf,dtype='float',unpack=True,usecols=[1,2,3,5])
+        res,err = res*1e3, err*1e3  #convert ms to us
         Sband = np.full(len(res),False)
         
     obs = [freq_bw(149.0,50.0,is_Sband=False,color=colors['pink'],zorder=2), \
@@ -92,10 +96,8 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
 
     check_tot = 0
     
-    # Get orbital phases
-    
     psr = pretty_psr_name.replace('$','').split()[1]
-    par_fname = f'data/{psr}_tdb.par'
+    par_fname = f'data/{psr}_fiore+23.par'
     tim_fname = f'data/{psr}_fiore+23.tim'
     
     y_max = 1.1*max([np.abs(r)+np.abs(e) for r,e in zip(res,err)])
@@ -114,10 +116,15 @@ for ii, (rf,nn,ax) in enumerate(zip(res_files,psr_names,axes.flat)):
         
     ax.set_ylim([y_min,y_max])
     
+    # Get orbital phases
+    
     mo = model.get_model(par_fname)
+    OM = mo["OM"].value
     to = toa.get_TOAs(tim_fname,model=mo)
     mjds = [t.value for t in to.get_mjds()]
-    orb_phase_unsorted = mo.orbital_phase(to, anom="mean", radians=False)
+    orb_phase_unsorted = mo.orbital_phase(to, anom="mean", radians=False) # I think this is not actually the mean anomaly M,
+                                                                 # but the Phi used in the ELL1 model,
+                                                                 # Phi = M + omega
     orb_phase = np.array([op for _,op in sorted(zip(mjds,orb_phase_unsorted))])
     
     for o in obs:
